@@ -1,6 +1,9 @@
 package com.fcamara.desafio.Model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="Companies")
@@ -8,9 +11,17 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty @NotNull
     private String name;
+
+    @NotEmpty @NotNull
     private String cnpj;
+
+    @NotEmpty @NotNull
     private String address;
+
+    @NotEmpty @NotNull
     private String phone;
     private Integer carCapacity;
     private Integer motorcycleCapacity;
@@ -23,6 +34,13 @@ public class Company {
         this.carCapacity = carCapacity;
         this.motorcycleCapacity = motorcycleCapacity;
     }
+
+    public Company(Company company) {
+    }
+
+    public Long getId() {return id;}
+
+    public void setId(Long id) { this.id = id;}
 
     public String getName() {
         return name;
