@@ -1,10 +1,10 @@
 package com.fcamara.desafio.Model;
 
 import com.fcamara.desafio.Repository.CompanyRepository;
-import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="Companies")

@@ -20,7 +20,7 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
     @PostMapping
-    public ResponseEntity<Company> createCompany(@RequestBody @Valid Company company, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Company> createCompany(@RequestBody @Valid Company company) {
         companyRepository.save(company);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
