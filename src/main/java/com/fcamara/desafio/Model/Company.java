@@ -1,5 +1,6 @@
 package com.fcamara.desafio.Model;
 
+import com.fcamara.desafio.Repository.CompanyRepository;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -35,7 +36,7 @@ public class Company {
         this.motorcycleCapacity = motorcycleCapacity;
     }
 
-    public Company(Company company) {
+    public Company() {
     }
 
     public Long getId() {return id;}
@@ -89,4 +90,16 @@ public class Company {
     public void setMotorcycleCapacity(Integer motorcycleCapacity) {
         this.motorcycleCapacity = motorcycleCapacity;
     }
+
+    public Company update(Long id, CompanyRepository companyRepository){
+        Company company = companyRepository.getReferenceById(id);
+        company.setName(this.getName());
+        company.setCnpj(this.getCnpj());
+        company.setAddress(this.getAddress());
+        company.setPhone(this.getPhone());
+        company.setCarCapacity(this.getCarCapacity());
+        company.setMotorcycleCapacity(this.getMotorcycleCapacity());
+        return company;
+    }
+
 }
