@@ -1,6 +1,6 @@
 package com.fcamara.desafio.Model;
 
-import com.fcamara.desafio.Repository.CarRepository;
+import com.fcamara.desafio.Repository.VehicleRepository;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="Cars")
-public class Car {
+public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class Car {
     @NotEmpty @NotNull
     private String type;
 
-    public Car(String make, String model, String color, String registration, String type) {
+    public Vehicle(String make, String model, String color, String registration, String type) {
         this.make = make;
         this.model = model;
         this.color = color;
@@ -36,7 +36,7 @@ public class Car {
         this.type = type;
     }
 
-    public Car(){
+    public Vehicle(){
 
     }
 
@@ -88,13 +88,13 @@ public class Car {
         this.type = type;
     }
 
-    public Car update(Long id, CarRepository carRepository){
-        Car car = carRepository.getReferenceById(id);
-        car.setMake(this.getMake());
-        car.setModel(this.getModel());
-        car.setColor(this.getColor());
-        car.setRegistration(this.getRegistration());
-        car.setType(this.getType());
-        return car;
+    public Vehicle update(Long id, VehicleRepository vehicleRepository){
+        Vehicle vehicle = vehicleRepository.getReferenceById(id);
+        vehicle.setMake(this.getMake());
+        vehicle.setModel(this.getModel());
+        vehicle.setColor(this.getColor());
+        vehicle.setRegistration(this.getRegistration());
+        vehicle.setType(this.getType());
+        return vehicle;
     }
 }

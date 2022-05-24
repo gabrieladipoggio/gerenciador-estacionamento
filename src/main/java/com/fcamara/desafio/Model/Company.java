@@ -5,6 +5,7 @@ import com.fcamara.desafio.Repository.CompanyRepository;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name="Companies")
@@ -26,6 +27,9 @@ public class Company {
     private String phone;
     private Integer carCapacity;
     private Integer motorcycleCapacity;
+ /*
+    private List<Vehicle> carsInGarage;
+    private List<Vehicle> motorcyclesInGarage; */
 
     public Company(String name, String cnpj, String address, String phone, Integer carCapacity, Integer motorcycleCapacity) {
         this.name = name;
