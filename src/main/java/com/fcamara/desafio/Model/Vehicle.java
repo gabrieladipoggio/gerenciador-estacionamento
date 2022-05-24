@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="Cars")
+@Table(name="Vehicles")
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,9 @@ public class Vehicle {
 
     @NotEmpty @NotNull
     private String type;
+
+    @ManyToOne
+    private Company company;
 
     public Vehicle(String make, String model, String color, String registration, String type) {
         this.make = make;
@@ -88,6 +91,14 @@ public class Vehicle {
         this.type = type;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     public Vehicle update(Long id, VehicleRepository vehicleRepository){
         Vehicle vehicle = vehicleRepository.getReferenceById(id);
         vehicle.setMake(this.getMake());
@@ -96,5 +107,15 @@ public class Vehicle {
         vehicle.setRegistration(this.getRegistration());
         vehicle.setType(this.getType());
         return vehicle;
+    }
+
+    public Boolean addToGarage(Long id, VehicleRepository vehicleRepository, Company company){
+        Vehicle vehicle = vehicleRepository.getReferenceById(id);
+        if(company.checkAvailability(vehicle)) {
+            vehicle.setCompany(company);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

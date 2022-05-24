@@ -1,5 +1,6 @@
 package com.fcamara.desafio.Controller;
 
+import com.fcamara.desafio.Model.Company;
 import com.fcamara.desafio.Model.Vehicle;
 import com.fcamara.desafio.Repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,14 @@ public class VehicleController {
     public ResponseEntity<Vehicle> deleteVehicle(@PathVariable Long id){
         vehicleRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/addToGarage")
+    public ResponseEntity<Vehicle> addCarToGarage(@PathVariable Long id, @RequestBody @Valid Vehicle vehicle, @RequestBody @Valid Company company){
+        if(vehicle.addToGarage(id, vehicleRepository, company)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

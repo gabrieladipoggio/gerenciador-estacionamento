@@ -25,11 +25,15 @@ public class Company {
 
     @NotEmpty @NotNull
     private String phone;
+
     private Integer carCapacity;
     private Integer motorcycleCapacity;
- /*
+
+    @OneToMany
     private List<Vehicle> carsInGarage;
-    private List<Vehicle> motorcyclesInGarage; */
+
+    @OneToMany
+    private List<Vehicle> motorcyclesInGarage;
 
     public Company(String name, String cnpj, String address, String phone, Integer carCapacity, Integer motorcycleCapacity) {
         this.name = name;
@@ -95,6 +99,22 @@ public class Company {
         this.motorcycleCapacity = motorcycleCapacity;
     }
 
+    public List<Vehicle> getCarsInGarage() {
+        return carsInGarage;
+    }
+
+    public void setCarsInGarage(List<Vehicle> carsInGarage) {
+        this.carsInGarage = carsInGarage;
+    }
+
+    public List<Vehicle> getMotorcyclesInGarage() {
+        return motorcyclesInGarage;
+    }
+
+    public void setMotorcyclesInGarage(List<Vehicle> motorcyclesInGarage) {
+        this.motorcyclesInGarage = motorcyclesInGarage;
+    }
+
     public Company update(Long id, CompanyRepository companyRepository){
         Company company = companyRepository.getReferenceById(id);
         company.setName(this.getName());
@@ -106,4 +126,13 @@ public class Company {
         return company;
     }
 
+    public Boolean checkAvailability(Vehicle vehicle){
+        if(vehicle.getType() == "car"){
+            Integer carCount = this.carsInGarage.size();
+            return carCount < this.carCapacity;
+        } else {
+            Integer motorcycleCount = this.motorcyclesInGarage.size();
+            return motorcycleCount < this.motorcycleCapacity;
+        }
+    }
 }
