@@ -1,5 +1,5 @@
 package com.fcamara.desafio.Controller;
-
+/*
 import com.fcamara.desafio.Model.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,3 +27,4 @@ public class UserController {
                 .decode(authToken)).split(":")[0];
     }
 }
+*/

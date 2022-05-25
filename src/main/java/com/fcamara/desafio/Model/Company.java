@@ -1,17 +1,20 @@
 package com.fcamara.desafio.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fcamara.desafio.Repository.CompanyRepository;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="Companies")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
     @NotEmpty @NotNull
@@ -29,11 +32,10 @@ public class Company {
     private Integer carCapacity;
     private Integer motorcycleCapacity;
 
-    @OneToMany
-    private List<Vehicle> carsInGarage;
+    @OneToMany(mappedBy = "company")
+    @JsonIgnore
+    private List<VehicleInGarage> vehiclesHistory;
 
-    @OneToMany
-    private List<Vehicle> motorcyclesInGarage;
 
     public Company(String name, String cnpj, String address, String phone, Integer carCapacity, Integer motorcycleCapacity) {
         this.name = name;
@@ -99,20 +101,12 @@ public class Company {
         this.motorcycleCapacity = motorcycleCapacity;
     }
 
-    public List<Vehicle> getCarsInGarage() {
-        return carsInGarage;
+    public List<VehicleInGarage> getVehiclesHistory() {
+        return vehiclesHistory;
     }
 
-    public void setCarsInGarage(List<Vehicle> carsInGarage) {
-        this.carsInGarage = carsInGarage;
-    }
-
-    public List<Vehicle> getMotorcyclesInGarage() {
-        return motorcyclesInGarage;
-    }
-
-    public void setMotorcyclesInGarage(List<Vehicle> motorcyclesInGarage) {
-        this.motorcyclesInGarage = motorcyclesInGarage;
+    public void setVehiclesHistory(List<VehicleInGarage> vehiclesHistory) {
+        this.vehiclesHistory = vehiclesHistory;
     }
 
     public Company update(Long id, CompanyRepository companyRepository){
@@ -128,11 +122,28 @@ public class Company {
 
     public Boolean checkAvailability(Vehicle vehicle){
         if(vehicle.getType() == "car"){
-            Integer carCount = this.carsInGarage.size();
+            Integer carCount = this.getCarsInGarage().size();
             return carCount < this.carCapacity;
         } else {
-            Integer motorcycleCount = this.motorcyclesInGarage.size();
+            Integer motorcycleCount = this.getMotorcyclesInGarage().size();
             return motorcycleCount < this.motorcycleCapacity;
         }
     }
+
+    @JsonIgnore
+    public List<Vehicle> getCarsInGarage(){
+        return this.vehiclesHistory.stream()
+                .filter(vehiclesHistory -> vehiclesHistory.getVehicle().getType() == "car" && vehiclesHistory.getExitTime() == null)
+                .map(vehiclesHistory -> vehiclesHistory.getVehicle())
+                .collect(Collectors.toList());
+    }
+
+    @JsonIgnore
+    public List<Vehicle> getMotorcyclesInGarage(){
+        return this.vehiclesHistory.stream()
+                .filter(vehiclesHistory -> vehiclesHistory.getVehicle().getType() == "motorcycle" && vehiclesHistory.getExitTime() == null)
+                .map(vehiclesHistory -> vehiclesHistory.getVehicle())
+                .collect(Collectors.toList());
+    }
+
 }
