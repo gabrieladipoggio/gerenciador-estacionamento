@@ -2,6 +2,7 @@ package com.fcamara.desafio.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fcamara.desafio.Repository.VehicleRepository;
+import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -29,14 +30,21 @@ public class Vehicle {
     @NotEmpty @NotNull
     private String registration;
 
-    @NotEmpty @NotNull
-    private String type;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TypeOfVehicle type;
+
+    @ApiModel
+    public enum TypeOfVehicle {
+        CAR,
+        MOTORCYCLE
+    }
 
     @OneToMany(mappedBy = "vehicle")
     @JsonIgnore
     private List<VehicleInGarage> companyHistory;
 
-    public Vehicle(String make, String model, String color, String registration, String type) {
+    public Vehicle(String make, String model, String color, String registration, TypeOfVehicle type) {
         this.make = make;
         this.model = model;
         this.color = color;
@@ -88,11 +96,11 @@ public class Vehicle {
         this.registration = registration;
     }
 
-    public String getType() {
+    public TypeOfVehicle getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TypeOfVehicle type) {
         this.type = type;
     }
 

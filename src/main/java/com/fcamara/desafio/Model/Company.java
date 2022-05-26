@@ -121,7 +121,7 @@ public class Company {
     }
 
     public Boolean checkAvailability(Vehicle vehicle){
-        if(vehicle.getType() == "car"){
+        if(vehicle.getType() == Vehicle.TypeOfVehicle.CAR){
             Integer carCount = this.getCarsInGarage().size();
             return carCount < this.carCapacity;
         } else {
@@ -133,7 +133,7 @@ public class Company {
     @JsonIgnore
     public List<Vehicle> getCarsInGarage(){
         return this.vehiclesHistory.stream()
-                .filter(vehiclesHistory -> vehiclesHistory.getVehicle().getType() == "car" && vehiclesHistory.getExitTime() == null)
+                .filter(vehiclesHistory -> vehiclesHistory.getVehicle().getType() == Vehicle.TypeOfVehicle.CAR && vehiclesHistory.getExitTime() == null)
                 .map(vehiclesHistory -> vehiclesHistory.getVehicle())
                 .collect(Collectors.toList());
     }
@@ -141,7 +141,7 @@ public class Company {
     @JsonIgnore
     public List<Vehicle> getMotorcyclesInGarage(){
         return this.vehiclesHistory.stream()
-                .filter(vehiclesHistory -> vehiclesHistory.getVehicle().getType() == "motorcycle" && vehiclesHistory.getExitTime() == null)
+                .filter(vehiclesHistory -> vehiclesHistory.getVehicle().getType() == Vehicle.TypeOfVehicle.MOTORCYCLE && vehiclesHistory.getExitTime() == null)
                 .map(vehiclesHistory -> vehiclesHistory.getVehicle())
                 .collect(Collectors.toList());
     }

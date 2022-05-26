@@ -29,7 +29,7 @@ public class VehicleController {
     private VehicleInGarageRepository vehicleInGarageRepository;
 
     @PostMapping
-    public ResponseEntity<Vehicle> createVehicle(@RequestBody @Valid Vehicle vehicle){
+    public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
         vehicleRepository.save(vehicle);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -47,7 +47,7 @@ public class VehicleController {
 
     @PutMapping ("/{id}")
     @Transactional
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @RequestBody @Valid Vehicle vehicle){
+    public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicle){
         vehicle.update(id, vehicleRepository);
         return new ResponseEntity<>(HttpStatus.OK);
     }

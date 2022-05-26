@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,7 +17,7 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
     @PostMapping
-    public ResponseEntity<Company> createCompany(@RequestBody @Valid Company company) {
+    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
         companyRepository.save(company);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -39,7 +36,7 @@ public class CompanyController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody @Valid Company company){
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company){
         company.update(id, companyRepository);
         return new ResponseEntity<>(HttpStatus.OK);
     }
