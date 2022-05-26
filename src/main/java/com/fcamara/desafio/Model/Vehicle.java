@@ -1,16 +1,21 @@
 package com.fcamara.desafio.Model;
 
-import com.fcamara.desafio.Repository.CarRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fcamara.desafio.Repository.VehicleRepository;
+import io.swagger.annotations.ApiModel;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
-@Table(name="Cars")
-public class Car {
+@Table(name="Vehicles")
+public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
     @NotEmpty @NotNull
@@ -25,10 +30,21 @@ public class Car {
     @NotEmpty @NotNull
     private String registration;
 
-    @NotEmpty @NotNull
-    private String type;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TypeOfVehicle type;
 
-    public Car(String make, String model, String color, String registration, String type) {
+    @ApiModel
+    public enum TypeOfVehicle {
+        CAR,
+        MOTORCYCLE
+    }
+
+    @OneToMany(mappedBy = "vehicle")
+    @JsonIgnore
+    private List<VehicleInGarage> companyHistory;
+
+    public Vehicle(String make, String model, String color, String registration, TypeOfVehicle type) {
         this.make = make;
         this.model = model;
         this.color = color;
@@ -36,7 +52,7 @@ public class Car {
         this.type = type;
     }
 
-    public Car(){
+    public Vehicle(){
 
     }
 
@@ -80,21 +96,21 @@ public class Car {
         this.registration = registration;
     }
 
-    public String getType() {
+    public TypeOfVehicle getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TypeOfVehicle type) {
         this.type = type;
     }
 
-    public Car update(Long id, CarRepository carRepository){
-        Car car = carRepository.getReferenceById(id);
-        car.setMake(this.getMake());
-        car.setModel(this.getModel());
-        car.setColor(this.getColor());
-        car.setRegistration(this.getRegistration());
-        car.setType(this.getType());
-        return car;
+    public Vehicle update(Long id, VehicleRepository vehicleRepository){
+        Vehicle vehicle = vehicleRepository.getReferenceById(id);
+        vehicle.setMake(this.getMake());
+        vehicle.setModel(this.getModel());
+        vehicle.setColor(this.getColor());
+        vehicle.setRegistration(this.getRegistration());
+        vehicle.setType(this.getType());
+        return vehicle;
     }
 }
