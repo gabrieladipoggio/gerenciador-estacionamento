@@ -1,6 +1,7 @@
 package com.fcamara.desafio.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fcamara.desafio.Repository.VehicleInGarageRepository;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -28,6 +29,10 @@ public class VehicleInGarage {
         this.vehicle = vehicle;
         this.company = company;
         this.entryTime = ZonedDateTime.now();
+    }
+
+    public VehicleInGarage(){
+
     }
 
     public Vehicle getVehicle() {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,12 @@ public class VehicleController {
         return vehicle;
     }
 
+    @GetMapping("/search/{registration}")
+        public Vehicle getCarByRegistration(@PathVariable String registration){
+        Vehicle vehicle = vehicleRepository.findByRegistration(registration);
+        return vehicle;
+    }
+
     @PutMapping ("/{id}")
     @Transactional
     public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @RequestBody Vehicle vehicle){
@@ -59,12 +66,11 @@ public class VehicleController {
     }
 
     @PatchMapping("/addToGarage")
-    public ResponseEntity<Vehicle> addCarToGarage(@RequestParam Long vehicleId, @RequestParam Long companyId){
-        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
+    public ResponseEntity<Vehicle> addCarToGarage(@RequestParam String registration, @RequestParam Long companyId){
+        Vehicle vehicle = vehicleRepository.findByRegistration(registration);
         Optional<Company> companyOptional = companyRepository.findById(companyId);
-        if (vehicleOptional.isPresent() && vehicleOptional.isPresent()){
+        if (companyOptional.isPresent()){
            Company company = companyOptional.get();
-           Vehicle vehicle = vehicleOptional.get();
 
            if(company.checkAvailability(vehicle)) {
                VehicleInGarage vehicleInGarage = new VehicleInGarage(vehicle, company);
@@ -77,4 +83,18 @@ public class VehicleController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @PatchMapping("/removeFromGarage")
+    public ResponseEntity<Vehicle> removeCarFromGarage(@RequestParam String registration, @RequestParam Long companyId){
+        Vehicle vehicle = vehicleRepository.findByRegistration(registration);
+        Optional<Company> companyOptional = companyRepository.findById(companyId);
+
+        if (companyOptional.isPresent()){
+            VehicleInGarage vehicleInGarage = vehicleInGarageRepository.findByVehicleId(vehicle.getId());
+            vehicleInGarage.setExitTime(ZonedDateTime.now());
+            vehicleInGarageRepository.save(vehicleInGarage);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }
