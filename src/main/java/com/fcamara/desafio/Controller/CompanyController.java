@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,6 @@ public class CompanyController {
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
     public ResponseEntity<byte[]> generateReport(@RequestParam Long companyId) throws Exception {
-        // Registration, type, time in, time out
         Optional<Company> company = companyRepository.findById(companyId);
         if(company.isPresent()){
             List<VehicleInGarage> vehicleInGarage = company.get().getVehiclesHistory();
@@ -75,7 +75,41 @@ public class CompanyController {
                     .map(this::convertVehicleHistoryToCSV)
                     .collect(Collectors.toList());
             String[] header = {"registration", "type", "entry_time", "exit_time"};
+            // Cars / motorb. currently, total in / total out (over the day)
+            String[] footer = {
+                    "Cars",
+                    Integer.toString(company.get().getCarsInGarage().size()),
+                    "Motorcycles",
+                    Integer.toString(company.get().getMotorcyclesInGarage().size()),
+                    "Total of Vehicles In",
+                    Integer.toString(
+                        vehicleInGarage
+                                .stream()
+                                .filter(
+                                        history -> history.getEntryTime().isAfter(
+                                                LocalDateTime.now().minusDays(1)
+                                        )
+                                )
+                                .collect(Collectors.toList())
+                                .size()
+                    ),
+                    "Total of Vehicles Out",
+                    Integer.toString(
+                            vehicleInGarage
+                                    .stream()
+                                    .filter(history -> history.getExitTime() != null)
+                                    .filter(
+                                            history -> history.getExitTime().isAfter(
+                                                    LocalDateTime.now().minusDays(1)
+                                            )
+                                    )
+                                    .collect(Collectors.toList())
+                                    .size()
+                    )
+            };
             csvData.add(0, header);
+            csvData.add(footer);
+
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             OutputStreamWriter streamWriter = new OutputStreamWriter(stream);
@@ -91,16 +125,19 @@ public class CompanyController {
         else {
            throw new Exception();
         }
-        // Summary - total cars
-
     }
 
     private String[] convertVehicleHistoryToCSV(VehicleInGarage history){
+        String exited = "-";
+        if(history.getExitTime() != null){
+            exited = history.getExitTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
+        }
+
         String[] entry = {
                 history.getVehicle().getRegistration(),
                 history.getVehicle().getType().toString(),
-                history.getEntryTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm")),
-                history.getExitTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm"))
+                history.getEntryTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
+                exited
         };
         return entry;
     }
