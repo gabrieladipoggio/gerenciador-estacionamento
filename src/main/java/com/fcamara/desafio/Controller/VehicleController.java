@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -90,7 +91,7 @@ public class VehicleController {
 
         if (companyOptional.isPresent()){
             VehicleInGarage vehicleInGarage = vehicleInGarageRepository.findByVehicleId(vehicle.getId());
-            vehicleInGarage.setExitTime(ZonedDateTime.now());
+            vehicleInGarage.setExitTime(LocalDateTime.now());
             vehicleInGarageRepository.save(vehicleInGarage);
             return new ResponseEntity<>(HttpStatus.OK);
 
