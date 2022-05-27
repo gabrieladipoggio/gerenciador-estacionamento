@@ -39,5 +39,5 @@ O projeto conta com duas classes de Controllers, representando o Veículo (Vehic
 
 1. __/company/report__: gera um arquivo .csv contendo uma listagem de todos os carros que passaram pelo estacionamento nas últimas 24 horas, além da contagem de quantos veículos estão estacionados no momento (especificando o número de carros e motos) e o número total de entradas e saídas do dia.
 2. __/vehicle/addToGarage__: método responsável por adicionar um carro no estacionamento, com base no id do estabelecimento e placa do carro previamente cadastrado.
-3. __vehicle/removeFromGarage__: metódo responsável por remover um carro do estacionamento, com base no id do estabelecimento e placa do carro previamente cadastrado.
-4. __vehicle/search/{registration}__: método responsável por buscar um carro no banco de dados, com base na sua placa.
+3. __/vehicle/removeFromGarage__: metódo responsável por remover um carro do estacionamento, com base no id do estabelecimento e placa do carro previamente cadastrado.
+4. __/vehicle/search/{registration}__: método responsável por buscar um carro no banco de dados, com base na sua placa.
