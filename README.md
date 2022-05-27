@@ -33,3 +33,11 @@
 
 ## 📄 Documentação
 Para a documentação do projeto foi utilizado o Swagger. Com o projeto rodando na sua máquina, você pode acessá-lo [aqui](http://localhost:8080/swagger-ui.html#/).
+
+## 🔍 Endpoints
+O projeto conta com duas classes de Controllers, representando o Veículo (Vehicle) e a Empresa (Company). Dessa forma, foi desenvolvido o CRUD completo de cada uma dessas classes, bem como alguns métodos auxiliares, sendo eles:
+
+1. __/company/report__: gera um arquivo .csv contendo uma listagem de todos os carros que passaram pelo estacionamento nas últimas 24 horas, além da contagem de quantos veículos estão estacionados no momento (especificando o número de carros e motos) e o número total de entradas e saídas do dia.
+2. __/vehicle/addToGarage__: método responsável por adicionar um carro no estacionamento, com base no id do estabelecimento e placa do carro previamente cadastrado.
+3. __vehicle/removeFromGarage__: metódo responsável por remover um carro do estacionamento, com base no id do estabelecimento e placa do carro previamente cadastrado.
+4. __vehicle/search/{registration}__: método responsável por buscar um carro no banco de dados, com base na sua placa.
