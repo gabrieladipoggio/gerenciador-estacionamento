@@ -32,7 +32,7 @@
 6. O projeto está pronto para rodar! 
 
 ## 📄 Documentação
-Para a documentação do projeto foi utilizado o Swagger. Com o projeto rodando na sua máquina, você pode acessá-lo [aqui](http://localhost:8080/swagger-ui.html#/).
+Para a documentação do projeto foi utilizado o Swagger. Com o projeto rodando na sua máquina, você pode acessá-lo [aqui](http://localhost:8080/swagger-ui.html#/). O projeto também conta com alguns casos de testes e tratamento de exceções. 
 
 ## 🔍 Endpoints
 O projeto conta com duas classes de Controllers, representando o Veículo (Vehicle) e a Empresa (Company). Dessa forma, foi desenvolvido o CRUD completo de cada uma dessas classes, bem como alguns métodos auxiliares, sendo eles:
