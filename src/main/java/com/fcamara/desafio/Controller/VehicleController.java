@@ -1,5 +1,7 @@
 package com.fcamara.desafio.Controller;
 
+import com.fcamara.desafio.Exceptions.VehicleNotRegisteredException;
+import com.fcamara.desafio.Exceptions.VehicleTypeException;
 import com.fcamara.desafio.Model.Company;
 import com.fcamara.desafio.Model.Vehicle;
 import com.fcamara.desafio.Model.VehicleInGarage;
@@ -31,9 +33,13 @@ public class VehicleController {
     private VehicleInGarageRepository vehicleInGarageRepository;
 
     @PostMapping
-    public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
-        vehicleRepository.save(vehicle);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle) throws VehicleTypeException {
+        if(vehicle.getType() == Vehicle.TypeOfVehicle.CAR || vehicle.getType() == Vehicle.TypeOfVehicle.MOTORCYCLE){
+            vehicleRepository.save(vehicle);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else{
+            throw new VehicleTypeException();
+        }
     }
 
     @GetMapping
@@ -85,7 +91,7 @@ public class VehicleController {
     }
 
     @PatchMapping("/removeFromGarage")
-    public ResponseEntity<Vehicle> removeCarFromGarage(@RequestParam String registration, @RequestParam Long companyId){
+    public ResponseEntity<Vehicle> removeCarFromGarage(@RequestParam String registration, @RequestParam Long companyId) throws VehicleNotRegisteredException {
         Vehicle vehicle = vehicleRepository.findByRegistration(registration);
         Optional<Company> companyOptional = companyRepository.findById(companyId);
 
@@ -95,7 +101,8 @@ public class VehicleController {
             vehicleInGarageRepository.save(vehicleInGarage);
             return new ResponseEntity<>(HttpStatus.OK);
 
+        } else {
+            throw new VehicleNotRegisteredException("Trying to remove a car from a company that doesn't exist");
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
